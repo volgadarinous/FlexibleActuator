@@ -67,7 +67,7 @@ fillDefaultFormValues();
 // param_min = 4*Math.pow(10,-6);
 // param_max = 8*Math.pow(10,-6);
 // param_step = Math.pow(10,-6);
-calcData();
+//calcData();
  
 
  /*Functions*/
@@ -514,6 +514,7 @@ function drawScatterPlot(){
       .enter().append("circle")
       .attr("class", "dot")
       .attr("stroke", "steelblue")
+      .attr("fill", "steelblue")
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap);
