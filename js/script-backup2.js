@@ -75,58 +75,22 @@ calcData();
  //  $(".max").css("display", "inline");
  // }
 
-
- /**************events**************/
- $(".min").change(function(event){
-   var succeed = updateValue(event.target.id,event.target.value)
-   if(!succeed){
-      alert("Error in Input Values");
-    }
-
-  });
-
-$(".max").change(function(event){
-   
-    var succeed = updateValue(event.target.id,event.target.value)
-    if(!succeed){
-      alert("Error in Input Values");
-    }
-
-});
-
- $(".step").change(function(event){
-   var succeed = updateValue(event.target.id,event.target.value)
-   if(!succeed){
-      alert("Error in Input Values");
-    }
-
-});
-
-
-  $("#draw-btn").click(function(){
-    calcData();
-  });
-
-
  $(".rangebtn").click(function() {
   var $this = $(this);
   id=this.id.slice(0,-10);
 
     $this.toggleClass('rangebtn');
     if($this.hasClass('rangebtn')){
-        rangeParam_arr=[];
-       // updateValue(id+"-max",0);
-        state = "fixed_values";
         $("#"+id+"-max").css("display","none");
         $("#"+id+"-step").css("display","none");
         $(".rangebtn:not(#"+rangeParam_arr[0]+",#"+rangeParam_arr[1]+")").prop('disabled', false);
+        rangeParam_arr=[];
+        updateValue(id+"-max",0);
         $this.text('Range Values>');         
     } else {
-        state = "range_values";
-        param_id = id;
-        rangeParam_arr.push(id+"range-btn");
         $("#"+id+"-max").css("display","inline");
         $("#"+id+"-step").css("display","inline");
+        rangeParam_arr.push(id+"range-btn");
         $(".rangebtn:not(#"+rangeParam_arr[0]+",#"+rangeParam_arr[1]+")").prop('disabled', true);
         $this.text('<');
     }
@@ -137,7 +101,7 @@ $(".max").change(function(event){
 
     // alert(id); // or alert($(this).attr('id'));
 });
-/*********************end of events***********************/
+
 
  function fillDefaultFormValues(){
     $("#pdeot-thickness-min").val(hp_min);
@@ -150,6 +114,44 @@ $(".max").change(function(event){
     $("#spe-youngs-min").val(Es_min);
  }
 
+$(".min").change(function(event){
+   var succeed = updateValue(event.target.id,event.target.value)
+
+});
+
+$(".max").change(function(event){
+
+//    if(event.target.value =="")
+//    {
+//       $(".max").prop('disabled', false);
+// //      $(".step").prop('disabled', false);
+//       rangeParam_arr = [];
+//       state = "fixed_values";
+//       calcData();
+//       return;
+//     }
+
+ // if(rangeParam_arr.length==0){
+ //   console.log(event.target.id);
+   
+    var succeed = updateValue(event.target.id,event.target.value)
+    if(succeed){
+      rangeParam_arr.push(event.target.id);
+      state = "range_values";
+      $(".max:not(#"+rangeParam_arr[0]+",#"+rangeParam_arr[1]+")").prop('disabled', true);
+      param_id = event.target.id.slice(0,-4);
+     // console.log(param_id);
+    //  console.log(param_max);
+
+   //   $(".step:not(#"+rangeParam_arr[0]+",#"+rangeParam_arr[1]+")").prop('disabled', true);
+      calcData();
+    }
+    else
+      console.log("Error in Input Values");
+
+ // }
+
+});
 
 function updateValue(id, value){
   switch (id) {
@@ -159,95 +161,72 @@ function updateValue(id, value){
      case 'pdeot-thickness-max':
       hp_max = value;
       break; 
-      case 'pdeot-thickness-step':
-      hp_step = value;
-      break; 
       case 'pdeot-thickness':
       console.log("correct update");
       hp = value;
       console.log(hp);
       break; 
-
      case 'pdeot-ioniconductivity-min':
       sigi_min = +value;
       break;
     case 'pdeot-ioniconductivity-max':
       sigi_max = +value;
       break;
-    case 'pdeot-ioniconductivity-step':
-      sigi_step = +value;
-      break;
         case 'pdeot-ioniconductivity':
       sigi = +value;
       break;
-
     case 'pdeot-youngs-min':
       Ep_min = +value;
       break;
-    case 'pdeot-youngs-max':
+     case 'pdeot-youngs-max':
       Ep_max = +value;
       break;
-    case 'pdeot-youngs-step':
-      Ep_step = +value;
-      break;
-    case 'pdeot-youngs':
+       case 'pdeot-youngs':
       Ep = +value;
       break;
-
-    case 'pdeot-eleconductivity-min':
+     case 'pdeot-eleconductivity-min':
       sige_min = +value;
       break;
-    case 'pdeot-eleconductivity-max':
+      case 'pdeot-eleconductivity-max':
       sige_max = +value;
       break;
-    case 'pdeot-eleconductivity-step':
-      sige_step = +value;
-      break;
-    case 'pdeot-eleconductivity':
+       case 'pdeot-eleconductivity':
       sige = +value;
       break;
-
-    case 'spe-thickness-min':
-      hg_min = value;
+      case 'spe-thickness-min':
+      hg_min = +value;
       break;
-    case 'spe-thickness-max':
-      hg_max = value;
+      case 'spe-thickness-max':
+      hg_max = +value;
       break;
-    case 'spe-thickness-step':
-      hg_step = value;
-      break;
-    case 'spe-thickness':
+       case 'spe-thickness':
       hg = +value;
       break;
-
-    case 'spe-ioniconductivity-min':
+      case 'spe-ioniconductivity-min':
       sigs_min = +value;
       break;
-    case 'spe-ioniconductivity-max':
+      case 'spe-ioniconductivity-max':
       sigs_max = +value;
       break;
-    case 'spe-ioniconductivity-step':
-      sigs_step = +value;
-      break;
-    case 'spe-ioniconductivity':
+      case 'spe-ioniconductivity':
       sigs = +value;
       break;
-
-    case 'spe-youngs-min':
+      case 'spe-youngs-min':
       Es_min = +value;
       break;
-    case 'spe-youngs-max':
+      case 'spe-youngs-max':
       Es_max = +value;
       break;
-    case 'spe-youngs-step':
-      Es_step = +value;
-      break;
-    case 'spe-youngs':
+      case 'spe-youngs':
       Es = +value;
       break;
   }
 
   return true;
+}
+
+function drawPlots(){
+  calcData();
 }
 
 
@@ -275,11 +254,11 @@ function calcData(){
       Es = Es_min;
 
      cleargraphs();
-     calcEW(); //main caculations for a set of fixed parameter values happen here.
-     prepareData(); //prepares data for drawing the plots
-     EW_drawaxis("#graph1"); //draws axis for the only plot needed in this case
-     drawLineGraph(); //draws the line plot
-     EW_WriteParamValues(); //writes the fixed values for max and cutt-off thresholds
+     calcEW();
+     prepareData();
+     EW_drawaxis("#graph1");
+     drawLineGraph();
+     EW_WriteParamValues();
   }
 
   else if(state =="range_values"){
@@ -293,25 +272,30 @@ function calcData(){
       param_arr.push(v);
       console.log("v:"+v);
       updateValue(param_id,v);
-      calcEW(); // main caculations for a set of fixed parameter values happen here.
-                //we call this function in a loop to find all the cutoff values.
+     // console.log(hp);
+      calcEW();
+      // console.log(param_arr);
+      // console.log(cutoff_arr);
     }
 
     console.log(param_arr);
     console.log(cutoff_arr);
 
-    cleargraphs();//cleans previous plots
-    prepareData(); //prepares the data for the two plots
+    cleargraphs();
+    prepareData();
     EW_drawaxis("#graph1");
-    drawScatterPlot();    //plot 1 is a scatter plot
+    drawScatterPlot();
     EW_drawaxis("#graph2");
-    drawLineGraph();      //plot 2 is a line plot
-    EW_WriteParamValues(); //We don't write any parameters values but may in future  
+    drawLineGraph();
+    EW_WriteParamValues();
+
+
+    
   }
+
 
 }
 
-//prepares the data in a format that is appropriate for d3.js to draw the graphs
 function prepareData(){
   if(state =="fixed_values"){
       data = f_arr.map(function(d, i){
@@ -325,8 +309,6 @@ function prepareData(){
   }
 }
 
-
-// main caculations for a set of fixed parameter values happen here.
 function calcEW(){
   //  console.log("in calcEW");
     ew_arr = [];
@@ -410,7 +392,6 @@ function calcEW(){
    //  console.log(cutoff_arr);
 }
 
-//We print max and cutoff threshold 
 function EW_WriteParamValues(){
   if(state =="fixed_values"){
         var index = cutoff_arr.length-1;
@@ -423,11 +404,13 @@ function EW_WriteParamValues(){
   }
 }
 
-//draw plot axis
+
 function EW_drawaxis(plotid){
 var margin = {top: 260, right: 20, bottom: 20, left:20},
     width = $(plotid).width()-margin.left-margin.right, 
     height = $(plotid).height()-margin.bottom-20;
+
+//d3.select(plotid).selectAll("*").remove();
 
 svg = d3.select(plotid).append("svg")
             .attr("width", width)
@@ -449,6 +432,8 @@ yMap = function(d) { return y(d.dim2);};
 line = d3.line()
           .x(xMap)
           .y(yMap);
+             // .x(function(d) { return x(d.dim1)+20;})//x(f_arr[i])+20; })
+             // .y(function(d) { return y(d.dim2)+10;});//ew_arr[i])+10; });//need to change this
 
 
 
@@ -494,6 +479,8 @@ line = d3.line()
   //     .attr("text-anchor", "end")
   //     .text("Z(jw)");
 
+ 
+
 }
 
 function drawLineGraph(){
@@ -513,13 +500,11 @@ function drawScatterPlot(){
       .data(data)
       .enter().append("circle")
       .attr("class", "dot")
-      .attr("stroke", "steelblue")
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap);
 }
 
-//cleans plots from the previous calculations
 function cleargraphs(){
   d3.selectAll(".graph").selectAll("*").remove();
 }

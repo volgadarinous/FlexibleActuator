@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Flexible Actuator Parameters</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css"/>
+	<link href="css/bootstrap-toggle.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css"/>
+</head>
+
+<body>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<!-- Device Picture Area-->
+		<div class="device col-xs-3">
+			<div class="row">
+				<div class="img-PDEOT col-xs-8 col-xs-offset-1">PDEOT</div>
+			</div>
+
+			<div class="row">
+				<div class="img-PSE col-xs-8 col-xs-offset-1">PSE</div>
+			</div>
+
+			<div class="row">
+				<div class="img-PDEOT col-xs-8 col-xs-offset-1">PDEOT</div>
+			</div>
+		</div>
+
+
+
+		<!-- Parameter Area-->
+		<form class="parameters form-inline col-xs-9">
+			<div class="PDEOT">
+				<div class="param-header">PEDOT Parameters</div>
+				<div class="row">
+					<!-- <div class="param col-xs-6">
+							<label class = "col-xs-4" for="hp">Thickness [hp]</label>
+					      	<input type="text" class="col-xs-2 min" id="pdeot-thickness-min" placeholder="min"/>
+					      	<button type="button" class="col-xs-2 rangebtn" id="pdeot-thickness-range-btn">Range Values></button>
+					      	<input type="text" class="col-xs-2 max" id="pdeot-thickness-max" placeholder="max"/>
+					      	<input type="text" class="col-xs-2 step" id="pdeot-thickness-step" placeholder="step"/>
+					</div> -->
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="sigi">Thickness [hp]</label>
+						    <input type="text" class="col-xs-2 min" id="pdeot-thickness-min" placeholder="min"/>
+						    <button type="button" class="rangebtn" id="pdeot-thickness-range-btn">Range Values></button>
+					      	<input type="text" class="col-xs-2 max" id="pdeot-thickness-max" placeholder="max"/>
+					      	<input type="text" class="col-xs-2 step" id="pdeot-thickness-step" placeholder="step"/>
+					</div>
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="sigi">Ionic Conductivity [Sig p]</label>
+						    <input type="text" class="col-xs-2 min" id="pdeot-ioniconductivity-min" placeholder="min"/>
+						    <button type="button" class="rangebtn" id="pdeot-ioniconductivity-range-btn">Range Values></button>
+					      	<input type="text" class="col-xs-2 max" id="pdeot-ioniconductivity-max" placeholder="max"/>
+					      	<input type="text" class="col-xs-2 step" id="pdeot-ioniconductivity-step" placeholder="step"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="Ep">Young's Modulus [E_PEDOT]</label>
+						    <input type="text" class="col-xs-2 min" id="pdeot-youngs-min" placeholder="min"/>
+						    <button type="button" class="rangebtn" id="pdeot-youngs-range-btn">Range Values></button>
+					      	<input type="text" class="col-xs-2 max" id="pdeot-youngs-max" placeholder="max"/>
+					      	<input type="text" class="col-xs-2 step" id="pdeot-youngs-step" placeholder="step"/>
+						<!--<div class = "input-group">
+						      <input type="text" class="form-control" id="pdeot-youngs" placeholder="0.2">
+						      <div class="input-group-addon"> ? </div>
+					     </div>-->
+					</div>
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="sige">Electronic Conductivity [Sige p]</label>
+						<input type="text" class="col-xs-2 min" id="pdeot-eleconductivity-min" placeholder="min"/>
+						<button type="button" class="rangebtn" id="pdeot-eleconductivity-range-btn">Range Values></button>
+					    <input type="text" class="col-xs-2 max" id="pdeot-eleconductivity-max" placeholder="max"/>
+					    <input type="text" class="col-xs-2 step" id="pdeot-eleconductivity-step" placeholder="step"/>
+						<!--<div class = "input-group">
+						      <input type="text" class="form-control" id="pdeot-eleconductivity" placeholder="0.2">
+						      <div class="input-group-addon"> ? </div>
+					     </div>-->
+					</div>
+				</div>
+			</div>
+			<div class="SPE">
+				<div class="param-header">SPE Parameters</div>
+				<div class="row">
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="hg">Thickness [hg]</label>
+						<input type="text" class="col-xs-2 min" id="spe-thickness-min" placeholder="min"/>
+						<button type="button" class="rangebtn" id="spe-thickness-range-btn">Range Values></button>
+					    <input type="text" class="col-xs-2 max" id="spe-thickness-max" placeholder="max"/>
+					    <input type="text" class="col-xs-2 step" id="spe-thickness-step" placeholder="step"/>
+					<!--	<div class = "input-group">
+						      <input type="text" class="form-control" id="spe-thickness" placeholder="0.2">
+						      <div class="input-group-addon"> mm </div>
+					     </div>-->
+					</div>
+
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="sigs">Ionic Conductivity [Sig s]</label>
+						<input type="text" class="col-xs-2 min" id="spe-ioniconductivity-min" placeholder="min"/>
+						<button type="button" class="rangebtn" id="spe-ioniconductivity-range-btn">Range Values></button>
+					    <input type="text" class="col-xs-2 max" id="spe-ioniconductivity-max" placeholder="max"/>
+					    <input type="text" class="col-xs-2 step" id="spe-ioniconductivity-step" placeholder="step"/>
+					<!--	<div class = "input-group">
+						      <input type="text" class="form-control" id="spe-ioniconductivity" placeholder="0.2">
+						      <div class="input-group-addon"> ? </div>
+					     </div>-->
+					</div>
+				</div>
+				<div class="row">
+					<div class="param col-xs-6">
+						<label class = "col-xs-4" for="Es">Young's Modulus [E_SPE]</label>
+						<input type="text" class="col-xs-2 min" id="spe-youngs-min" placeholder="min"/>
+						<button type="button" class="rangebtn" id="spe-youngs-range-btn">Range Values></button>
+					    <input type="text" class="col-xs-2 max" id="spe-youngs-max" placeholder="max"/>
+					    <input type="text" class="col-xs-2 step" id="spe-youngs-step" placeholder="step"/>
+						<!--<div class = "input-group">
+						      <input type="text" class="form-control" id="spe-youngs" placeholder="0.2">
+						      <div class="input-group-addon"> ? </div>
+					     </div>-->
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-4 col-xs-offset-5"><button type="submit" class="drawbtn btn btn-primary" id="draw-btn" onclick="drawPlots()">Draw Plots</button></div>
+		</form>
+	</div>
+</div>
+
+
+	<div class="plots-area container-fluid">
+		<h1>Plots</h1>
+		<div class="row">
+				<div class="col-xs-3 graphinfo"><label id="graphparam1"></label></div>
+				<div class="col-xs-3 graphinfo"><label id="graphparam2"></label></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4 graph" id="graph1"></div>
+			<div class="col-xs-4 graph" id="graph2"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-toggle.min.js"></script>
+	<script type="text/javascript" src="js/d3.min.js"></script>
+	<script type="text/javascript" src="js/math.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

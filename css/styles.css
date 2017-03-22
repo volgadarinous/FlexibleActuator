@@ -1,0 +1,99 @@
+body{
+	font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+input{
+	margin-right: 10px;
+	/*margin-left:5px;*/
+}
+
+/*label{
+	font-weight: bold;
+}*/
+
+.row {
+	margin-bottom: 6px;
+}
+
+/*.row > div {;
+	border:2px solid black;
+}*/
+
+/*.device, .parameters {
+	height:250px; 
+}
+*/
+.param{
+	margin-top: 30px
+}
+.device {
+	margin-top: 50px
+}
+.PDEOT, .SPE{
+	margin-top: 15px;
+	margin-bottom: 20px;
+}
+
+.param-header{
+	font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	font-size:200%;
+	font-weight: bold;
+	margin-bottom: 10px;
+	
+}
+
+.plots-area{
+	border:2px solid black;
+	height:500px; 
+
+}
+
+.img-PDEOT {
+	background-color:lightgray;
+	height:40px;
+	border-radius: 5px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 40px; 
+	font-weight: bold; 
+}
+
+.img-PSE {
+	border:2px solid black;
+	border-radius: 5px;
+	height:80px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 80px;  
+	font-weight: bold;
+}
+
+.drawbtn{
+	width: 150px;
+}
+
+.plots, #graph1, #graph2{
+	height:300px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+#draw-btn{
+	margin-top: 25px;
+}
+
+button{
+	background-color: white;
+	border:0;
+	font-weight: bold;
+
+}
+
+.max, .step{
+	display: none;
+}
+
+.rangebtn:disabled {
+    /*background: #dddddd;*/
+    font-weight: normal;
+}
