@@ -3,9 +3,9 @@ var svg,xMap,yMap,line;
 
 /*Initialize Parameters*/
 var al= Math.pow(10, -10),//1E-10; //strain to charge ratio
-Cv=5*Math.pow(10,7),// 5E7;  //Volumetric capacitance [F/m]
+Cv=3*Math.pow(10,7),// 5E7;  //Volumetric capacitance [F/m]
 w= 300,//*Math.pow(10,-6), //300e-6; //Width of the sample
-L= 3000,//*Math.pow(10,-6), //3000e-6; //length of the sample
+L= 1500,//*Math.pow(10,-6), //3000e-6; //length of the sample
 A=w*L,  // area = width x length
 j = math.complex(0,1);
 
@@ -21,21 +21,21 @@ var sigi_min=0.02, // ionic conductivity of PEDOT [s/m]
 sigi_max=0.02,
 sigi=0.02;
 
-var sigs_min=0.08, // ionic conductivity of SPE
-sigs_max=0.08,
-sigs=0.08;
+var sigs_min=0.2, // ionic conductivity of SPE
+sigs_max=0.2,
+sigs=0.2;
 
 var sige_min= 6000, // electronic conductivity of PEDOT [s/m]
 sige_max=6000,
 sige=6000;
 
-var hp_min= 4,//*Math.pow(10,-6), //4E-6; // thickness of the PEDOT
-hp_max=4,//*Math.pow(10,-6),
-hp=4;//*Math.pow(10,-6);
+var hp_min= 2,//*Math.pow(10,-6), //4E-6; // thickness of the PEDOT
+hp_max=2,//*Math.pow(10,-6),
+hp=2;//*Math.pow(10,-6);
 
-var hg_min= 5,//*Math.pow(10,-6), //5E-6;  // thickness of the SPE layer
-hg_max=5,//*Math.pow(10,-6),
-hg=5;//*Math.pow(10,-6);
+var hg_min= 10,//*Math.pow(10,-6), //5E-6;  // thickness of the SPE layer
+hg_max=10,//*Math.pow(10,-6),
+hg=10;//*Math.pow(10,-6);
 
 var f_min= 0.001,
 f_max= 1000,
@@ -377,7 +377,8 @@ function calcData(){
     console.log("min of maxF: "+Math.min.apply(null, maxF_arr));
     console.log("max of maxF: "+Math.max.apply(null, maxF_arr));
     EW_drawaxis("#graph2");
-    drawLineGraph();      //plot 2 is a line plot
+    //drawLineGraph();      //plot 2 is a line plot
+     drawScatterPlot();    //plot 2 is a scatter plot
     EW_WriteParamValues(); //We don't write any parameters values but may in future  
   }
 
@@ -530,15 +531,26 @@ svg = d3.select(plotid).append("svg")
             .attr("width", width)
             .attr("height",height);
 
-var x = d3.scaleLog()
+var x = d3.scaleLinear()
           .domain(d3.extent(data, function(d) { return d.dim1; }))
           .range([50, (width-50)]);
           console.log(width);
 
-var y = d3.scaleLog()
-          .domain(d3.extent(data, function(d){ return d.dim2; }))
-          .range([height-50, 50]);
-          console.log(height);
+          if(plotid=="#graph2"){
+            var min = d3.min(data, function(d) { return d.dim2; });
+            var max = 5*d3.max(data, function(d) { return d.dim2; });
+            var y = d3.scaleLinear()
+              .domain([min-min/2, 5*d3.max(data, function(d) { return d.dim2; })])
+              .range([height-50, 50]);
+              console.log(height);
+          }
+          else{
+              var y = d3.scaleLinear()
+                        .domain(d3.extent(data, function(d){ return d.dim2; }))
+                        .range([height-50, 50]);
+                        console.log(height);
+          }
+
  
 
 xMap = function(d) { return x(d.dim1);}; // data -> display
@@ -565,6 +577,7 @@ line = d3.line()
             "translate("+ ((width-50)/2) + ","+(height-15) + ")")
       .style("text-anchor", "middle")
       .text(dim1_text);
+
       
    // svg.append("text")
    //  .attr("class", "coord-label")
@@ -589,6 +602,8 @@ line = d3.line()
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
       .call(d3.axisLeft(y));
+
+      // yaxis.tickValues(d3.range(20, 80, 4));
 
      // text label for the y axis
   svg.append("text")
