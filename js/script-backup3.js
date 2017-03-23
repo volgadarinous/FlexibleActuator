@@ -374,8 +374,6 @@ function calcData(){
     EW_drawaxis("#graph1");
     drawScatterPlot();    //plot 1 is a scatter plot
     prepareData("maxF_arr");
-    console.log("min of maxF: "+Math.min.apply(null, maxF_arr));
-    console.log("max of maxF: "+Math.max.apply(null, maxF_arr));
     EW_drawaxis("#graph2");
     drawLineGraph();      //plot 2 is a line plot
     EW_WriteParamValues(); //We don't write any parameters values but may in future  
@@ -389,22 +387,22 @@ function calcData(){
 //prepares the data in a format that is appropriate for d3.js to draw the graphs
 function prepareData(datatype){
   if(state =="fixed_values"){
-    dim1_text = "Frequency";
-    dim2_text = "Ew";
+    // dim1_text = "Frequency";
+    // dim2_text = "Ew";
       data = f_arr.map(function(d, i){
        return { 'dim1' : f_arr[i], 'dim2' : ew_arr[i] };
      });
   }
   else if(state == "range_values" && datatype=="cutoff_arr"){
-      dim1_text = param_id;
-      dim2_text = "Cutoff Value";
+      // dim1_text = param_id;
+      // dim2_text = "Cutoff Value";
        data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : cutoff_arr[i] };
      });
   }
   else if(state == "range_values" && datatype=="maxF_arr"){
-    dim1_text= param_id;
-    dim2_text= "Max Value";
+    // dim1_text= param_id;
+    // dim2_text= "Max Value";
        data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : maxF_arr[i] };
      });
@@ -415,26 +413,36 @@ function prepareData(datatype){
 // main caculations for a set of fixed parameter values happen here.
 function calcEW(){
   //  console.log("in calcEW");
+    console.log("in calcEW");
     ew_arr = [];
-    _hp = hp*Math.pow(10,-6);
-    _hg = hg*Math.pow(10,-6);
-    _Ep = Ep*Math.pow(10,6);
-    _Es = Es*Math.pow(10,6);
-    _w = w*Math.pow(10,-6);
-    _L = L*Math.pow(10,-6);
-    _A=w*L;
+    hp = hp*Math.pow(10,-6);
+    hg = hg*Math.pow(10,-6);
+    Ep = Ep*Math.pow(10,6);
+    Es = Es*Math.pow(10,6);
+    w = w*Math.pow(10,-6);
+    L = L*Math.pow(10,-6);
+    A=w*L;
 
+    console.log(hp);
+    console.log(hg);
+    console.log(Ep);
+    console.log(Es);
+    console.log(w);
+    console.log(L);
+    console.log(sigi);
+    console.log(sige);
+    console.log(sigs);
 
     for(f=f_min; f<f_max; f=f+df){
       var Ri= math.divide(1,sigi);
-      Ri = math.divide(Ri,_w);// Ri = 1/sigi/w;   // Ri: ionic resistane per thickness
+      Ri = math.divide(Ri,w);// Ri = 1/sigi/w;   // Ri: ionic resistane per thickness
       
-      var Rs = math.divide(_hg,_w);
+      var Rs = math.divide(hg,w);
       Rs = math.divide(Rs,sigs);
       Rs = math.divide(Rs,2);// Rs = hg/w/sigs/2;   // Rs: electrolyte resistance
       
-      var Re= math.divide(1,_w);
-      Re = math.divide(Re,_hp);
+      var Re= math.divide(1,w);
+      Re = math.divide(Re,hp);
       Re = math.divide(Re,sige);// Re=1/w/hp/sige; // Re: electronic resistance per unit length
       
       var Zc= math.divide(1,j);
@@ -442,7 +450,7 @@ function calcEW(){
       Zc = math.divide(Zc,Math.PI);
       Zc = math.divide(Zc,f);
       Zc = math.divide(Zc,Cv);
-      Zc = math.divide(Zc,_w);//Zc=1./1j./2./pi./f./Cv./A;
+      Zc = math.divide(Zc,w);//Zc=1./1j./2./pi./f./Cv./A;
 
    //   console.log(Zc);
       
@@ -451,7 +459,7 @@ function calcEW(){
 
       var temp = math.divide(Ri,Zc);
       temp = math.sqrt(temp);
-      temp = math.multiply(temp,_hp);
+      temp = math.multiply(temp,hp);
       temp = math.coth(temp);
 
       Z1D = math.multiply(Z1D,temp);
@@ -461,7 +469,7 @@ function calcEW(){
       Z2D = math.sqrt(Z2D);
       temp = math.divide(Re,Z1D);
       temp = math.sqrt(temp);
-      temp = math.multiply(temp,_L);
+      temp = math.multiply(temp,L);
       temp = math.coth(temp);
       Z2D = math.multiply(Z2D,temp);// Z2D=sqrt(Re.*Z1D).*coth(sqrt(Re./Z1D).*L);
       //console.log(Z2D);
@@ -472,9 +480,9 @@ function calcEW(){
       pw = math.divide(pw,2);
       pw = math.divide(pw,Math.PI);
       pw = math.divide(pw,f);
-      pw = math.divide(pw,_hp);
-      pw = math.divide(pw,_w);
-      pw = math.divide(pw,_L); //pw=Iw./1j./2./pi./f./hp./w./L;
+      pw = math.divide(pw,hp);
+      pw = math.divide(pw,w);
+      pw = math.divide(pw,L); //pw=Iw./1j./2./pi./f./hp./w./L;
       //console.log(pw);
 
 
@@ -504,7 +512,7 @@ function calcEW(){
      } //indices = find(ABS <= F0); a(1,count)=min(f(indices)); aa(1,count)=MAX;
    //  console.log(cutoff_arr);
    maxF_arr.push(max_ew);
-   console.log("max_ew: "+max_ew)
+   // console.log("max_ew: "+max_ew)
 }
 
 //We print max and cutoff threshold 

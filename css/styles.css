@@ -3,7 +3,7 @@ body{
 }
 
 input{
-	margin-right: 10px;
+	margin-right: 5px;
 	/*margin-left:5px;*/
 }
 
@@ -12,8 +12,9 @@ input{
 }*/
 
 .row {
-	margin-bottom: 6px;
+	margin-bottom: 0px;
 }
+
 
 /*.row > div {;
 	border:2px solid black;
@@ -23,22 +24,24 @@ input{
 	height:250px; 
 }
 */
-.param{
+.paramrow{
 	margin-top: 30px
+	margin-bottom:6px;
 }
-.device {
+.devicecolumn {
 	margin-top: 50px
 }
-.PDEOT, .SPE{
+.pdeotcolumn, .misccolumn{
 	margin-top: 15px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .param-header{
-	font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	/*font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;*/
 	font-size:200%;
 	font-weight: bold;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
+	margin-top: 15px;
 	
 }
 
@@ -51,28 +54,31 @@ input{
 .img-PDEOT {
 	background-color:lightgray;
 	height:40px;
-	border-radius: 5px;
+	border-radius: 0px;
 	text-align: center;
 	vertical-align: middle;
 	line-height: 40px; 
 	font-weight: bold; 
+	margin: 0px 0px 0px 10px;
 }
 
 .img-PSE {
 	border:2px solid black;
-	border-radius: 5px;
+	border-radius: 0px;
 	height:80px;
 	text-align: center;
 	vertical-align: middle;
 	line-height: 80px;  
 	font-weight: bold;
+	margin: 0px 0px 0px 10px;
+
 }
 
 .drawbtn{
 	width: 150px;
 }
 
-.plots, #graph1, #graph2{
+#graph1, #graph2{
 	height:300px;
 	margin-right: 5px;
 	margin-left: 5px;
@@ -80,6 +86,7 @@ input{
 
 #draw-btn{
 	margin-top: 25px;
+	margin-bottom: 10px;
 }
 
 button{
@@ -96,4 +103,25 @@ button{
 .rangebtn:disabled {
     /*background: #dddddd;*/
     font-weight: normal;
+    color:  #dddddd;
+}
+
+.status{
+	margin: 35px 10px 0px 10px;
+}
+
+#progressbar{
+	background-color: #dddddd;
+	border-radius: 5px;
+	padding: 0px 0px 0px 0px;
+	/*width: 20%;*/
+	/*height: 30px;*/
+}
+
+#progressval{
+	background-color: blue;
+	width:1%;
+	height: 30px;
+	border-radius: 5px;
+	/*margin-top: 20px;*/
 }
