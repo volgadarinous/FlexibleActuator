@@ -54,8 +54,12 @@ param_arr=[];
 var Vw_arr = [],Vw
 f_arr = [],
 ew_arr = [],
+fw_arr = [],
+dw_arr = [],
 cutoff_arr = [],
-maxF_arr = [],
+maxEW_arr = [],
+maxFW_arr = [],
+maxDW_arr = [],
 data = [],
 rangeParam_arr = [],//,"pdeot-eleconductivity-max"];
 max_ew=0,
@@ -64,22 +68,14 @@ progress="done";
 var progress_counter=0;
 
 var dim1_text="",
-dim2_text="";
+dim2_text="",
+num_ticks_x=5,
+num_ticks_y=5,
+y_order=0;
 /* End of Parameter Initialization*/
 
 
 //fillDefaultFormValues();
-// param_id = "pdeot-thickness";
-// param_min = 4*Math.pow(10,-6);
-// param_max = 8*Math.pow(10,-6);
-// param_step = Math.pow(10,-6);
-//calcData();
- 
-
- /*Functions*/
- // function showRange(){
- //  $(".max").css("display", "inline");
- // }
 
 
  /**************events**************/
@@ -90,33 +86,6 @@ dim2_text="";
     }
 
   });
-
-//  $(".min").change(function(event){
-//    var succeed = updateValue(event.target.id,event.target.value)
-//    if(!succeed){
-//       alert("Error in Input Values");
-//     }
-
-//   });
-
-// $(".max").change(function(event){
-   
-//     var succeed = updateValue(event.target.id,event.target.value)
-//     if(!succeed){
-//       alert("Error in Input Values");
-//     }
-
-// });
-
-//  $(".step").change(function(event){
-//    var succeed = updateValue(event.target.id,event.target.value)
-//    if(!succeed){
-//       alert("Error in Input Values");
-//     }
-
-// });
-
-
   $("#draw-btn").click(function(){
     progress = "working";
     cleargraphs();
@@ -150,12 +119,6 @@ dim2_text="";
         $this.text('<');
     }
 
-
-  // id=this.id.slice(0,-10);
-  // alert("#"+id+"-max");
- 
-
-    // alert(id); // or alert($(this).attr('id'));
 });
 /*********************end of events***********************/
   // function checkprogress() {
@@ -344,9 +307,15 @@ function calcData(){
 
      cleargraphs();
      calcEW(); //main caculations for a set of fixed parameter values happen here.
-     prepareData("ew_arr"); //prepares data for drawing the plots
-     EW_drawaxis("#graph1"); //draws axis for the only plot needed in this case
-     drawLineGraph(); //draws the line plot
+     prepareData("strain"); //prepares data for plot 1
+     EW_drawaxis("#graph1"); //draws axis for plot 1
+     drawLineGraph(); //plot 1
+     prepareData("force"); //prepares data for plot 2
+     EW_drawaxis("#graph2"); //draws axis for plot 2
+     drawLineGraph(); //plot2
+     prepareData("displacement"); //prepares data for plot 3
+     EW_drawaxis("#graph3"); //draws axis for plot 3
+     drawLineGraph(); //plot 3 
      EW_WriteParamValues(); //writes the fixed values for max and cutt-off thresholds
   }
 
@@ -366,50 +335,100 @@ function calcData(){
                 //we call this function in a loop to find all the cutoff values.
     }
 
-    console.log(param_arr);
-    console.log(cutoff_arr);
-
+    // console.log(param_arr);
+    // console.log(cutoff_arr);
     cleargraphs();//cleans previous plots
-    prepareData("cutoff_arr"); //prepares the data for the two plots
+    prepareData("cutoff"); //prepares the data for the two plots
     EW_drawaxis("#graph1");
-    drawScatterPlot();    //plot 1 is a scatter plot
-    prepareData("maxF_arr");
-    console.log("min of maxF: "+Math.min.apply(null, maxF_arr));
-    console.log("max of maxF: "+Math.max.apply(null, maxF_arr));
+    drawScatterPlot();    //plot 1 
+    prepareData("maxForce");
     EW_drawaxis("#graph2");
-    //drawLineGraph();      //plot 2 is a line plot
-     drawScatterPlot();    //plot 2 is a scatter plot
+    drawScatterPlot();    //plot 2 
+    prepareData("maxDisplacement");
+    EW_drawaxis("#graph3");
+    drawScatterPlot();    //plot 3 
     EW_WriteParamValues(); //We don't write any parameters values but may in future  
   }
 
-   $("#progresstext").text("");
+  $("#progresstext").text("");
   // progress="done";
 
 }
 
 //prepares the data in a format that is appropriate for d3.js to draw the graphs
 function prepareData(datatype){
-  if(state =="fixed_values"){
-    dim1_text = "Frequency";
-    dim2_text = "Ew";
+  switch(datatype){
+    case "strain":
+      dim1_text = "Frequency";
+      dim2_text = "Strain / Voltage (V)";
       data = f_arr.map(function(d, i){
        return { 'dim1' : f_arr[i], 'dim2' : ew_arr[i] };
-     });
-  }
-  else if(state == "range_values" && datatype=="cutoff_arr"){
+      });
+      break;
+
+    case "force":
+      dim1_text = "Frequency";
+      dim2_text = "Force (µN) / Voltage (V)";
+      data = f_arr.map(function(d, i){
+       return { 'dim1' : f_arr[i], 'dim2' : fw_arr[i] };
+      });
+      break;
+
+    case "displacement":
+      dim1_text = "Frequency";
+      dim2_text = "Displacement (mm) / Voltage (V)";
+      data = f_arr.map(function(d, i){
+       return { 'dim1' : f_arr[i], 'dim2' : dw_arr[i] };
+      });
+      break;
+
+      //Range values
+    case "cutoff":
       dim1_text = param_id;
-      dim2_text = "Cutoff Value";
+      dim2_text = "Cutoff Frequency (Hz)";
        data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : cutoff_arr[i] };
-     });
+      });
+      break;
+    case "maxForce":
+      dim1_text= param_id;
+      dim2_text= "Max Force (µN) / Voltage (V)";
+      data = param_arr.map(function(d, i){
+       return { 'dim1' : param_arr[i], 'dim2' : maxFW_arr[i] };
+      });
+      break;
+    case "maxDisplacement":
+      dim1_text= param_id;
+      dim2_text= "Max Displacement (mm) / Voltage (V)";
+      data = param_arr.map(function(d, i){
+       return { 'dim1' : param_arr[i], 'dim2' : maxDW_arr[i] };
+      });
+      break;
   }
-  else if(state == "range_values" && datatype=="maxF_arr"){
-    dim1_text= param_id;
-    dim2_text= "Max Value";
-       data = param_arr.map(function(d, i){
-       return { 'dim1' : param_arr[i], 'dim2' : maxF_arr[i] };
-     });
-  }
+  
+
+
+  // if(state =="fixed_values"){
+  //   dim1_text = "Frequency";
+  //   dim2_text = "Strain/Voltage (V)";
+  //     data = f_arr.map(function(d, i){
+  //      return { 'dim1' : f_arr[i], 'dim2' : ew_arr[i] };
+  //    });
+  // }
+  // else if(state == "range_values" && datatype=="cutoff_arr"){
+  //     dim1_text = param_id;
+  //     dim2_text = "Cutoff Value";
+  //      data = param_arr.map(function(d, i){
+  //      return { 'dim1' : param_arr[i], 'dim2' : cutoff_arr[i] };
+  //    });
+  // }
+  // else if(state == "range_values" && datatype=="maxF_arr"){
+  //   dim1_text= param_id;
+  //   dim2_text= "Max Value";
+  //      data = param_arr.map(function(d, i){
+  //      return { 'dim1' : param_arr[i], 'dim2' : maxF_arr[i] };
+  //    });
+  // }
 }
 
 
@@ -417,6 +436,8 @@ function prepareData(datatype){
 function calcEW(){
   //  console.log("in calcEW");
     ew_arr = [];
+    fw_arr = [];
+    dw_arr = [];
     _hp = hp*Math.pow(10,-6);
     _hg = hg*Math.pow(10,-6);
     _Ep = Ep*Math.pow(10,6);
@@ -479,23 +500,50 @@ function calcEW(){
       //console.log(pw);
 
 
+      /**********Strain ***********/
       var ew = math.multiply(al,pw); //ew=al*pw;
       var ew_polar = ew.toPolar();
       var ew_abs = ew_polar.r;
       ew_arr.push(ew_abs);//ABS=abs(ew);
+
+      /**********Force ***********/
+      var temp = Ep*3*Math.pow(10,-6);
+      temp = temp*al;
+      temp = math.multiply(temp,pw);//1E6*3*Ep*al*pw
+
+      var temp2 = w*hp*(hp+hg);//w*hp*(hp+hg)
+
+      var fw = math.multiply(temp,temp2);
+      fw = math.divide(fw,2);
+      fw = math.divide(fw,L);///2/L;
+      //Fw=1E6*3*Ep*al*pw*w*hp*(hp+hg)/2/L;
+      var fw_polar = fw.toPolar();
+      var fw_abs = fw_polar.r;
+      fw_arr.push(fw_abs);
+
+      /**********Displacement ****/
+      temp = 2*hp+hg; //(2*hp+hg) 
+      temp2 = L*Math.pow(10,-6); //1E3*L
+      temp2 = Math.pow(temp2,2); //^2
+      var dw = math.multiply(temp2,ew);
+      dw = math.divide(dw,temp);
+      // Dw=1E3*L.^2*ew/(2*hp+hg) 
+      var dw_polar = dw.toPolar();
+      var dw_abs = dw_polar.r;
+      dw_arr.push(dw_abs);
+     
      // console.log(ew_abs);
 
     }//end of four
 
     
-    var min_ew = Math.min.apply(null, ew_arr);
-    max_ew = Math.max.apply(null, ew_arr); //MAX=max(ABS);
+    // var min_ew = Math.min.apply(null, ew_arr);
+    var max_ew = Math.max.apply(null, ew_arr); //MAX=max(ABS);
+    var max_fw = Math.max.apply(null, fw_arr); //MAX=max(ABS);
+    var max_dw = Math.max.apply(null, dw_arr); //MAX=max(ABS);
+
+
     F0 = max_ew*0.7079; //F0=max(ABS)*0.7079;
-
-    // console.log(min_ew);
-    // console.log(max_ew);
-    // console.log(F0);
-
     for(i=0; i<ew_arr.length; i++){
       if(ew_arr[i]<=F0){
         cutoff_arr.push(f_arr[i]);
@@ -504,16 +552,20 @@ function calcEW(){
       }
      } //indices = find(ABS <= F0); a(1,count)=min(f(indices)); aa(1,count)=MAX;
    //  console.log(cutoff_arr);
-   maxF_arr.push(max_ew);
-   console.log("max_ew: "+max_ew)
+   maxEW_arr.push(max_ew);
+   maxFW_arr.push(max_fw);
+   maxDW_arr.push(max_dw);
+
+   // console.log("max_ew: "+max_ew)
 }
 
 //We print max and cutoff threshold 
 function EW_WriteParamValues(){
   if(state =="fixed_values"){
         var index = cutoff_arr.length-1;
+        var val = Number((cutoff_arr[index]).toFixed(2))
         $("#graphparam1").text("Max Ew: "+max_ew);
-        $("#graphparam2").text("Cutoff Frequency: "+cutoff_arr[index]);
+        $("#graphparam2").text("Cutoff Frequency: "+val);
   }
   else if(state =="range_values"){       
         $("#graphparam1").text("");
@@ -523,109 +575,78 @@ function EW_WriteParamValues(){
 
 //draw plot axis
 function EW_drawaxis(plotid){
-var margin = {top: 260, right: 20, bottom: 20, left:20},
-    width = $(plotid).width()-margin.left-margin.right, 
-    height = $(plotid).height()-margin.bottom-20;
+    var margin = {top: 260, right: 20, bottom: 20, left:20},
+        width = $(plotid).width()-margin.left-margin.right, 
+        height = $(plotid).height()-margin.bottom-20;
 
-svg = d3.select(plotid).append("svg")
-            .attr("width", width)
-            .attr("height",height);
+    svg = d3.select(plotid).append("svg")
+                .attr("width", width)
+                .attr("height",height);
 
-var x = d3.scaleLinear()
-          .domain(d3.extent(data, function(d) { return d.dim1; }))
-          .range([50, (width-50)]);
-          console.log(width);
+    var x,y;
 
-          if(plotid=="#graph2"){
-            var min = d3.min(data, function(d) { return d.dim2; });
-            var max = 5*d3.max(data, function(d) { return d.dim2; });
-            var y = d3.scaleLinear()
-              .domain([min-min/2, 5*d3.max(data, function(d) { return d.dim2; })])
-              .range([height-50, 50]);
-              console.log(height);
-          }
-          else{
-              var y = d3.scaleLinear()
-                        .domain(d3.extent(data, function(d){ return d.dim2; }))
-                        .range([height-50, 50]);
-                        console.log(height);
-          }
+/*********prapare  X axis *********/
+    if(state =="fixed_values")
+      x =  d3.scaleLog();
+       
+    else 
+      x = d3.scaleLinear();
 
- 
+    x.domain(d3.extent(data, function(d) { return d.dim1; }))
+     .range([70, (width-70)]);
 
-xMap = function(d) { return x(d.dim1);}; // data -> display
-yMap = function(d) { return y(d.dim2);};
-line = d3.line()
-          .x(xMap)
-          .y(yMap);
+     var xaxis = svg.append("g")
+        .attr("transform", "translate(0,"+(height-50)+")")
+        .call(d3.axisBottom(x)
+                .ticks(num_ticks_x));
+         // text label for the x axis
+    svg.append("text")             
+        .attr("transform",
+              "translate("+ ((width)/2) + ","+(height-15) + ")")
+        .style("text-anchor", "middle")
+        .attr("class","axislabel")
+        .text(dim1_text);
+
+/*********prapare  Y axis *********/
+    y = d3.scaleLinear();
+    var min = d3.min(data, function(d) { return d.dim2; });
+    var max = 5*d3.max(data, function(d) { return d.dim2; });
+    var y_order = Math.floor(Math.log(max) / Math.LN10
+                       + 0.000000001);
 
 
+    console.log("Y order: "+y_order);
 
-  var xaxis = svg.append("g")
-      .attr("transform", "translate(0,"+(height-50)+")")
-      // .append("text")
-      // .attr("class", "coord-label")
-      // .attr("x", width)
-      // .attr("y", height-margin.bottom)
-   //   .style("text-anchor", "end")
-      // .text("W")
-      .call(d3.axisBottom(x));
-
-       // text label for the x axis
-  svg.append("text")             
-      .attr("transform",
-            "translate("+ ((width-50)/2) + ","+(height-15) + ")")
-      .style("text-anchor", "middle")
-      .text(dim1_text);
-
+    if(state == "range_values" && plotid =="#graph2"){
+         y.domain([min-min/2, 5*d3.max(data, function(d) { return d.dim2; })])
+          .range([height-50, 50]);
+    }
+    else{
+      y.domain(d3.extent(data, function(d){ return d.dim2; }))
+       .range([height-50, 50]);
+    }
       
-   // svg.append("text")
-   //  .attr("class", "coord-label")
-   //  .attr("x", width)
-   //  .attr("y", height-margin.bottom)
-   //  .style("text-anchor", "end")
-   //  .text("W");//append label for x axis
-    // .style("font-size", "16px")
-    // .attr("font-weight", "bold");
+    var yaxis = svg.append("g")
+      .attr('transform', "translate(70,0)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .call(d3.axisLeft(y)
+                .ticks(num_ticks_y)
+                .tickFormat(d3.formatPrefix(".1", Math.pow(10,y_order))));
 
+       // text label for the y axis
+    svg.append("text")
+        .attr("transform", "translate("+ (30/2) +","+((height)/2)+")rotate(-90)")
+        .style("text-anchor", "middle")
+        .attr("class","axislabel")
+        .text(dim2_text);     
 
- // var yAxis = d3.axisLeft(y);
-   var yaxis = svg.append("g")
-    .attr('transform', "translate(50,0)")
-   // .attr("transform", "rotate(-90)")
-      // .attr("y", 6)
-      // .attr("dy", "0.71em")
-      // .attr("text-anchor", "end")
-      // .text("Ew")
-      //.classed('y axis', true)
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .call(d3.axisLeft(y));
-
-      // yaxis.tickValues(d3.range(20, 80, 4));
-
-     // text label for the y axis
-  svg.append("text")
-      .attr("transform", "translate("+ (30/2) +","+((height)/2)+")rotate(-90)")
-   //   .attr("transform", "rotate(-90)")
-      // .attr("y", 100)//0 - margin.left)
-      // .attr("x",100)//0 - ((height-50) / 2))
-      // .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text(dim2_text);  
-
-
-  // var yaxis = svg.append("g")
-  //     .call(d3.axisLeft(y))
-  //     .append("text")
-  //     .attr("fill", "#000")
-  //     .attr("transform", "translate(10,"+(height-margin.bottom)+")")
-  //     .attr("transform", "rotate(-90)")
-  //     .attr("y", 6)
-  //     .attr("dy", "0.71em")
-  //     .attr("text-anchor", "end")
-  //     .text("Z(jw)");
+    xMap = function(d) { return x(d.dim1);}; // data -> display
+    yMap = function(d) { return y(d.dim2);};
+    line = d3.line()
+              .x(xMap)
+              .y(yMap);
 
 }
 

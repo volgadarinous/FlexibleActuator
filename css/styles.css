@@ -78,10 +78,14 @@ input{
 	width: 150px;
 }
 
-#graph1, #graph2{
+#graph1, #graph2,#graph3{
 	height:300px;
-	margin-right: 5px;
-	margin-left: 5px;
+	/*margin-right: 5px;
+	margin-left: 5px;*/
+}
+
+.graphinfo{
+	font-size: 150%;
 }
 
 #draw-btn{
@@ -124,4 +128,9 @@ button{
 	height: 30px;
 	border-radius: 5px;
 	/*margin-top: 20px;*/
+}
+
+.axislabel{
+	font-size: 120%;
+	font-weight: bold;
 }
