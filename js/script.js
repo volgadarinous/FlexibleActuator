@@ -477,23 +477,23 @@ function calcEW(){
       ew_arr.push(ew_abs);//ABS=abs(ew);
 
       /**********Force ***********/
-      var temp = Ep*3*Math.pow(10,6);
+      var temp = _Ep*3*Math.pow(10,6);
       temp = temp*al;
       temp = math.multiply(temp,pw);//1E6*3*Ep*al*pw
 
-      var temp2 = w*hp*(hp+hg);//w*hp*(hp+hg)
+      var temp2 = _w*_hp*(_hp+_hg);//w*hp*(hp+hg)
 
       var fw = math.multiply(temp,temp2);
       fw = math.divide(fw,2);
-      fw = math.divide(fw,L);///2/L;
+      fw = math.divide(fw,_L);///2/L;
       //Fw=1E6*3*Ep*al*pw*w*hp*(hp+hg)/2/L;
       var fw_polar = fw.toPolar();
       var fw_abs = fw_polar.r;
       fw_arr.push(fw_abs);
 
       /**********Displacement ****/
-      temp = 2*hp+hg; //(2*hp+hg) 
-      temp2 = Math.pow(L,2); //^2
+      temp = 2*_hp+_hg; //(2*hp+hg) 
+      temp2 = Math.pow(_L,2); //^2
       temp2 = temp2*Math.pow(10,3); //1E3*L
       var dw = math.multiply(temp2,ew);
       dw = math.divide(dw,temp);
