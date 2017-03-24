@@ -121,36 +121,6 @@ y_order=0;
 
 });
 /*********************end of events***********************/
-  // function checkprogress() {
-  //    if(progress=="done"){
-  //       $("#progresstext").css("display","none");
-  //       progress_counter=0;
-  //       return;
-  //    }
-
-  //     $("#progresstext").text("Calculating plot values");
-  //     switch ((progress_counter%4)) {
-  //       case 0:
-  //          $("#progresstext").text("Calculating plot values");
-  //          progress_counter++;
-  //       break;
-  //       case 1:
-  //          $("#progresstext").text("Calculating plot values .");
-  //          progress_counter++;
-  //       break;
-  //       case 2:
-  //          $("#progresstext").text("Calculating plot values . . ");
-  //          progress_counter++;
-  //       break;
-  //       case 3:
-  //          $("#progresstext").text("Calculating plot values . . .");
-  //          progress_counter++;
-  //       break;
-  //     }
-
-  //     console.log("in checkprogress");
-  //     $("#progresstext").css("display","inline"); 
-  // }
 
  function fillDefaultFormValues(){
     $("#pdeot-thickness-min").val(hp_min);
@@ -327,7 +297,7 @@ function calcData(){
     param_arr = [];
     cutoff_arr = [];
     maxF_arr = [];
-    for(v = param_min; v<param_max; v = v+param_step){
+    for(v = param_min; v<=param_max; v = v+param_step){
       param_arr.push(v);
       console.log("v:"+v);
       updateValue(param_id,v);
@@ -359,7 +329,7 @@ function calcData(){
 function prepareData(datatype){
   switch(datatype){
     case "strain":
-      dim1_text = "Frequency";
+      dim1_text = "Frequency (Hz)";
       dim2_text = "Strain / Voltage (V)";
       data = f_arr.map(function(d, i){
        return { 'dim1' : f_arr[i], 'dim2' : ew_arr[i] };
@@ -367,7 +337,7 @@ function prepareData(datatype){
       break;
 
     case "force":
-      dim1_text = "Frequency";
+      dim1_text = "Frequency (Hz)";
       dim2_text = "Force (µN) / Voltage (V)";
       data = f_arr.map(function(d, i){
        return { 'dim1' : f_arr[i], 'dim2' : fw_arr[i] };
@@ -375,7 +345,7 @@ function prepareData(datatype){
       break;
 
     case "displacement":
-      dim1_text = "Frequency";
+      dim1_text = "Frequency (Hz)";
       dim2_text = "Displacement (mm) / Voltage (V)";
       data = f_arr.map(function(d, i){
        return { 'dim1' : f_arr[i], 'dim2' : dw_arr[i] };
@@ -384,21 +354,21 @@ function prepareData(datatype){
 
       //Range values
     case "cutoff":
-      dim1_text = param_id;
+      dim1_text = parseDimensionText(param_id);
       dim2_text = "Cutoff Frequency (Hz)";
        data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : cutoff_arr[i] };
       });
       break;
     case "maxForce":
-      dim1_text= param_id;
+      dim1_text= parseDimensionText(param_id);
       dim2_text= "Max Force (µN) / Voltage (V)";
       data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : maxFW_arr[i] };
       });
       break;
     case "maxDisplacement":
-      dim1_text= param_id;
+      dim1_text= parseDimensionText(param_id);
       dim2_text= "Max Displacement (mm) / Voltage (V)";
       data = param_arr.map(function(d, i){
        return { 'dim1' : param_arr[i], 'dim2' : maxDW_arr[i] };
@@ -447,7 +417,7 @@ function calcEW(){
     _A=w*L;
 
 
-    for(f=f_min; f<f_max; f=f+df){
+    for(f=f_min; f<=f_max; f=f+df){
       var Ri= math.divide(1,sigi);
       Ri = math.divide(Ri,_w);// Ri = 1/sigi/w;   // Ri: ionic resistane per thickness
       
@@ -507,7 +477,7 @@ function calcEW(){
       ew_arr.push(ew_abs);//ABS=abs(ew);
 
       /**********Force ***********/
-      var temp = Ep*3*Math.pow(10,-6);
+      var temp = Ep*3*Math.pow(10,6);
       temp = temp*al;
       temp = math.multiply(temp,pw);//1E6*3*Ep*al*pw
 
@@ -523,8 +493,8 @@ function calcEW(){
 
       /**********Displacement ****/
       temp = 2*hp+hg; //(2*hp+hg) 
-      temp2 = L*Math.pow(10,-6); //1E3*L
-      temp2 = Math.pow(temp2,2); //^2
+      temp2 = Math.pow(L,2); //^2
+      temp2 = temp2*Math.pow(10,3); //1E3*L
       var dw = math.multiply(temp2,ew);
       dw = math.divide(dw,temp);
       // Dw=1E3*L.^2*ew/(2*hp+hg) 
@@ -564,11 +534,11 @@ function EW_WriteParamValues(){
   if(state =="fixed_values"){
         var index = cutoff_arr.length-1;
         var val = Number((cutoff_arr[index]).toFixed(2))
-        $("#graphparam1").text("Max Ew: "+max_ew);
+        // $("#graphparam1").text("Max Ew: "+max_ew);
         $("#graphparam2").text("Cutoff Frequency: "+val);
   }
   else if(state =="range_values"){       
-        $("#graphparam1").text("");
+        // $("#graphparam1").text("");
         $("#graphparam2").text("");
   }
 }
@@ -610,21 +580,24 @@ function EW_drawaxis(plotid){
 /*********prapare  Y axis *********/
     y = d3.scaleLinear();
     var min = d3.min(data, function(d) { return d.dim2; });
-    var max = 5*d3.max(data, function(d) { return d.dim2; });
+    var max = d3.max(data, function(d) { return d.dim2; });
     var y_order = Math.floor(Math.log(max) / Math.LN10
                        + 0.000000001);
 
 
     console.log("Y order: "+y_order);
 
-    if(state == "range_values" && plotid =="#graph2"){
-         y.domain([min-min/2, 5*d3.max(data, function(d) { return d.dim2; })])
-          .range([height-50, 50]);
-    }
-    else{
-      y.domain(d3.extent(data, function(d){ return d.dim2; }))
+    // if(state == "range_values" && plotid =="#graph2"){
+    //      y.domain([min-min/2, 5*d3.max(data, function(d) { return d.dim2; })])
+    //       .range([height-50, 50]);
+    // }
+    // else{
+      // y.domain([(min-0.05*y_order),(max+0.05*y_order)])//d3.extent(data, function(d){ return d.dim2; }))
+      ypadding = 0.5*Math.pow(10,y_order);
+
+      y.domain([(min-ypadding),(max+ypadding)])
        .range([height-50, 50]);
-    }
+    // }
       
     var yaxis = svg.append("g")
       .attr('transform', "translate(70,0)")
@@ -677,6 +650,39 @@ function drawScatterPlot(){
 //cleans plots from the previous calculations
 function cleargraphs(){
   d3.selectAll(".graph").selectAll("*").remove();
-  $("#graphparam1").text("");
+  // $("#graphparam1").text("");
   $("#graphparam2").text("");
+}
+
+function parseDimensionText(paramid){
+ var text="";
+  switch(paramid){
+    case "pdeot-thickness":
+      text = "PDEOT Thickness (µm)";
+    break;
+    case "pdeot-ioniconductivity":
+      text = "PDEOT Ionic Conductivity (S/m)";
+    break;
+    case "pdeot-youngs":
+      text = "PDEOT Youngs Modulus (MPa)";
+    break;
+    case "pdeot-eleconductivity":
+      text = "PDEOT Electronic Conductivity (S/m)";
+    break;
+
+
+    case "spe-thickness":
+      text = "SPE Thickness (µm)";
+    break;
+    case "spe-ioniconductivity":
+      text = "SPE Ionic Conductivity (S/m)";
+    break;
+    case "spe-youngs":
+      text = "SPE Youngs Modulus (MPa)";
+    break;
+
+  }
+
+
+ return text;
 }

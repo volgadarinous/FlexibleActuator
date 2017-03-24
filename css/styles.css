@@ -52,6 +52,7 @@ input{
 }
 
 .img-PDEOT {
+	border:2px solid black;
 	background-color:lightgray;
 	height:40px;
 	border-radius: 0px;
