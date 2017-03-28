@@ -658,27 +658,27 @@ function parseDimensionText(paramid){
  var text="";
   switch(paramid){
     case "pdeot-thickness":
-      text = "PDEOT Thickness (µm)";
+      text = "Conducting Polymer Thickness (µm)";
     break;
     case "pdeot-ioniconductivity":
-      text = "PDEOT Ionic Conductivity (S/m)";
+      text = "Conducting Polymer Ionic Conductivity (S/m)";
     break;
     case "pdeot-youngs":
-      text = "PDEOT Youngs Modulus (MPa)";
+      text = "Conducting Polymer Youngs Modulus (MPa)";
     break;
     case "pdeot-eleconductivity":
-      text = "PDEOT Electronic Conductivity (S/m)";
+      text = "Conducting Polymer Electronic Conductivity (S/m)";
     break;
 
 
     case "spe-thickness":
-      text = "SPE Thickness (µm)";
+      text = "Separator Thickness (µm)";
     break;
     case "spe-ioniconductivity":
-      text = "SPE Ionic Conductivity (S/m)";
+      text = "Separator Ionic Conductivity (S/m)";
     break;
     case "spe-youngs":
-      text = "SPE Youngs Modulus (MPa)";
+      text = "Separator Youngs Modulus (MPa)";
     break;
 
   }
